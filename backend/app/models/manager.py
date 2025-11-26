@@ -1,8 +1,8 @@
 from functools import lru_cache
 from typing import Callable
 
-from app.models.base import BaseModel
-from app.models.convnext.model import ConvNeXtBinaryModel_StyleGan1
+from models.base import BaseModel
+from models.convnext.model import ConvNeXtBinaryModel_StyleGan1
 
 ModelBuilder = Callable[[], BaseModel]
 

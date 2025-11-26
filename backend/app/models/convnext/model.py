@@ -2,11 +2,12 @@
 import torch
 from torchvision import transforms
 from PIL import Image
+from PIL.Image import Image as PILImage
 import timm
 
-from app.models.base import BaseModel
-from app.models.convnext.model_impl import ConvNeXtBinaryClassifier
-from app.config.dirs import TORCH_WEIGHTS_DIR
+from models.base import BaseModel
+from models.convnext.model_impl import ConvNeXtBinaryClassifier
+from config.dirs import TORCH_WEIGHTS_DIR
 
 
 
@@ -39,18 +40,18 @@ class ConvNeXtBinaryModel_StyleGan1(BaseModel):
 
         self.weight_path = TORCH_WEIGHTS_DIR / "stylegan1_convnext.pth"
 
-    def load(self, weight_path: str | None = None):
-        state = torch.load(weight_path or self.weight_path, map_location=self.device)
+    def load(self):
+        state = torch.load(self.weight_path, map_location=self.device)
         self.model.load_state_dict(state)
         self.model.to(self.device)
         self.model.eval()
         return self
 
-    def preprocess(self, image: Image.Image):
+    def preprocess(self, image: PILImage):
         tensor = self.transform(image)
         return tensor
 
-    def predict(self, image: Image.Image):
+    def predict(self, image: PILImage) -> float:
         tensor = self.preprocess(image)
         tensor = tensor.unsqueeze(0).to(self.device)
         with torch.inference_mode():

@@ -1,15 +1,17 @@
 from io import BytesIO
+from time import time
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from PIL import Image, UnidentifiedImageError
-from time import time
-from app.models.manager import get_model
+
+from models.manager import get_model
+from schemas.results import StyleGan1ConvNeXtResultSchema
 
 
 router = APIRouter(prefix="/stylegan1", tags=["stylegan1"])
 
 
-@router.post("/predict")
+@router.post("/predict", response_model=StyleGan1ConvNeXtResultSchema)
 async def predict_image(file: UploadFile = File(...)):
     content = await file.read()
     if not content:
@@ -26,9 +28,8 @@ async def predict_image(file: UploadFile = File(...)):
     end_time = time()
     elapsed_time = end_time - start_time
 
-    return {
-        "name": file.filename,
-        "probability": prob,
-        "label": "real" if prob >= 0.5 else "fake",
-        "elapsed_time": elapsed_time,
-    }
+    return StyleGan1ConvNeXtResultSchema(
+        file_name=file.filename,
+        probability=prob,
+        label="real" if prob >= 0.5 else "fake",
+        prediction_time=elapsed_time)

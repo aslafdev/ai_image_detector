@@ -3,8 +3,7 @@ from abc import ABC, abstractmethod
 
 class BaseModel(ABC):
     @abstractmethod
-    def load(self, weight_path: str | None = None):
-        """Load model weights."""
+    def load(self):
         pass
 
     @abstractmethod
