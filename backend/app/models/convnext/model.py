@@ -4,10 +4,13 @@ from torchvision import transforms
 from PIL import Image
 import timm
 
-from models.base import BaseModel
-from models.convnext.model_impl import ConvNeXtBinaryClassifier
+from app.models.base import BaseModel
+from app.models.convnext.model_impl import ConvNeXtBinaryClassifier
+from app.config.dirs import TORCH_WEIGHTS_DIR
 
-from config.dirs import TORCH_WEIGHTS_DIR
+
+
+
 
 
 class ConvNeXtBinaryModel_StyleGan1(BaseModel):

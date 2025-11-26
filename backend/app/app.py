@@ -1,8 +1,12 @@
 from fastapi import FastAPI
 
-from src.routes.stylegan1 import router as stylegan1_router
+from app.routes.models.stylegan1 import router as stylegan1_router
 
 app = FastAPI(title="AI Image Detector")
+
+
+
+
 
 
 @app.get("/health")
