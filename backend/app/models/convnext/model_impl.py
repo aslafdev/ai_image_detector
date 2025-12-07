@@ -9,7 +9,7 @@ class ClassificationHead(nn.Module):
         self.fc1 = nn.Linear(in_features, 128)
         self.relu = nn.ReLU(inplace=True)
         self.dropout2 = nn.Dropout(0.3)
-        self.fc2 = nn.Linear(128, 1)   # 1 logit (bez sigmoida)
+        self.fc2 = nn.Linear(128, 1)  
 
     def forward(self, x):
         x = self.norm(x)
@@ -31,5 +31,5 @@ class ConvNeXtBinaryClassifier(nn.Module):
         x = self.backbone(x)      # [B, 768]
         x = self.head(x)          # [B, 1]
         return x
-
+    
 
