@@ -2,6 +2,7 @@
 
 import time
 from models.base import BaseModel
+from typing import List
 
 class DummySlowModel(BaseModel):
     def __init__(self):
@@ -16,14 +17,9 @@ class DummySlowModel(BaseModel):
         print("DUMMY: Załadowano!")
         return self
 
-    @property
-    def columns(self) -> dict[str, str]:
-        return {
-            "filename": "Plik", 
-            "prediction": "Decyzja", 
-            "score": "Pewność", 
-            "prediction_time": "Czas (s)"
-        }
+    @staticmethod
+    def features() -> List[str]:
+        return ["Symulacja"]
 
     def preprocess(self, image):
         return image

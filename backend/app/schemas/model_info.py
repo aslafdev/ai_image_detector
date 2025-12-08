@@ -1,7 +1,8 @@
 
+from dataclasses import dataclass
 from pydantic import BaseModel
 from enum import Enum
-from typing import Type
+from typing import List, Type
 
 class ModelStatus(str, Enum):
     NOT_LOADED = "not_loaded"
@@ -10,7 +11,7 @@ class ModelStatus(str, Enum):
     ERROR = "error"
 
 
-
+@dataclass
 class ExistingModel:
     id: str
     name: str
@@ -22,5 +23,6 @@ class ModelInfoOut(BaseModel):
     id: str
     name: str
     status : ModelStatus
+    features: List[str]
 
     

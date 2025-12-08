@@ -1,22 +1,16 @@
 from pydantic import BaseModel
-from typing import Literal, Any, Dict, List
+from typing import Literal, Union, List, Optional
 
-
-CellType = Literal["tag", "percent", "text", "number"]
+CellType = Literal["text", "tag", "percent", "number"]
+ValueType = Union[str, float, int, bool]
 
 class TableCell(BaseModel):
-    value: Any          # Surowa wartość (do CSV/eksportu), np. 0.98
-    type: CellType      # Jak to narysować?
+    value: ValueType
+    label: str           # <--- WAŻNE: To będzie nagłówek kolumny (np. "Decyzja")
+    type: CellType       # Jak to wyświetlić (tag, tekst, %)
 
-
-class TableRow(BaseModel):
-    filename: TableCell
-    decision: TableCell 
-    score: TableCell 
-    prediction_time: TableCell
+class PredictionResult(BaseModel):
+    filename: str
+    cells: List[TableCell]          
+    prediction_time: float 
     
-    extra_metrics: Dict[str, TableCell] = {}
-
-class Table(BaseModel):
-    header: Dict[str,str] 
-    table: List[TableRow]

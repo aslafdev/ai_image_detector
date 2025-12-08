@@ -1,17 +1,15 @@
 
 from abc import ABC, abstractmethod
-from typing import Dict
-from schemas.model_results import TableRow
+from typing import List
 
 class BaseModel(ABC):
     @abstractmethod
     def load(self):
         pass
     
-
-    @property
+    @staticmethod
     @abstractmethod
-    def columns(self) -> Dict[str, str]:
+    def features() -> List[str]:
         pass
 
     @abstractmethod
@@ -20,7 +18,7 @@ class BaseModel(ABC):
 
 
     @abstractmethod
-    def predict(self, image)-> TableRow:
+    def predict(self, image):
         pass 
 
 

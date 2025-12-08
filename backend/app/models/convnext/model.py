@@ -9,9 +9,10 @@ from models.base import BaseModel
 from models.convnext.model_impl import ConvNeXtBinaryClassifier
 from config.dirs import TORCH_WEIGHTS_DIR
 
-from schemas.model_results import TableRow,TableCell, CellType
-from time import time
+from schemas.model_results import TableCell, PredictionResult,CellType, ValueType
+from typing import List
 
+import time
 
 
 class ConvNeXtBinaryModel_StyleGan1(BaseModel):
@@ -47,31 +48,25 @@ class ConvNeXtBinaryModel_StyleGan1(BaseModel):
         print("Model loaded to", self.device)
         return self
     
-    @property
-    def columns(self) -> dict[str, str]:
-        return {"filename": "filename", "prediction": "prediction", "score": "score", 'prediction_time': 'prediction time (s)'}
-
+    @staticmethod
+    def features() -> List[str]:
+        return ["decision", "score"]
+    
     def preprocess(self, image: PILImage):
         tensor = self.transform(image)
         return tensor
 
-    def predict(self, image: PILImage) -> TableRow:
-        time_start = time()
+    def predict(self, image: PILImage) -> tuple[List[TableCell],float]:
+        start_time = time.time()
+
         tensor = self.preprocess(image)
         tensor = tensor.unsqueeze(0).to(self.device)
         with torch.inference_mode():
             output = self.model(tensor).view(-1)
             prob = torch.sigmoid(output).item()
-        time_end = time()
-        elapsed_time = time_end - time_start
-        
-        filename_cell = TableCell(value=image.filename,type="text")
-        decision_cell = TableCell(value="real" if prob >= 0.5 else "fake", type="tag")
-        score_cell = TableCell(value=prob, type="percent")
-        prediction_time_cell = TableCell(value=elapsed_time, type="number")
-        return TableRow(
-            filename=filename_cell,
-            decision=decision_cell,
-            score=score_cell,
-            prediction_time=prediction_time_cell
-        )
+
+        elapsed_time = time.time() - start_time
+
+        decision_cell = TableCell(value="real" if prob >= 0.5 else "fake", type="tag", label=self.features()[0])
+        score_cell = TableCell(value=prob, type="percent", label=self.features()[1])
+        return [decision_cell, score_cell], elapsed_time
