@@ -70,3 +70,6 @@ class ConvNeXtBinaryModel_StyleGan1(BaseModel):
         decision_cell = TableCell(value="real" if prob >= 0.5 else "fake", type="tag", label=self.features()[0])
         score_cell = TableCell(value=prob, type="percent", label=self.features()[1])
         return [decision_cell, score_cell], elapsed_time
+
+    
+    

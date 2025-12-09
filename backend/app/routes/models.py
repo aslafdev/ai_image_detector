@@ -19,7 +19,6 @@ import io
 import time
 
 
-# Prefiks '/models' jest ustawiony tutaj globalnie dla tego pliku
 router = APIRouter(prefix='/models', tags=['models'])
 
 

@@ -7,7 +7,8 @@ ValueType = Union[str, float, int, bool]
 class TableCell(BaseModel):
     value: ValueType
     label: str           # <--- WAŻNE: To będzie nagłówek kolumny (np. "Decyzja")
-    type: CellType       # Jak to wyświetlić (tag, tekst, %)
+    type: CellType
+    
 
 class PredictionResult(BaseModel):
     filename: str
